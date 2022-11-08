@@ -6,7 +6,6 @@ import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 
 import decoration from '../../resources/img/vision.png';
 import { Component } from "react/cjs/react.production.min";
-import PropTypes from 'prop-types'
 
 class App extends Component{
     state = {
@@ -39,9 +38,4 @@ class App extends Component{
         )
     }
 }
-
-App.propTypes = {
-
-}
-
 export default App;
