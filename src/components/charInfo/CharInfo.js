@@ -5,12 +5,12 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'; 
 
 const CharInfo = (props) => {
     const [char, setChar] = useState(null);
 
-    const {loading, error, getOneCharacter} = useMarvelService();
+    const {loading, error, getOneCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -21,6 +21,7 @@ const CharInfo = (props) => {
         if (!charId) {
             return;  
         }
+        clearError();
         getOneCharacter(charId)
             .then(onCharLoaded)
     }
