@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import useMarvelService from '../../services/MarvelService';
@@ -8,7 +9,7 @@ import './comicsList.scss';
 const ComicsList = () => {
     const [comicsList, setComicsList] = useState([]);
     const [newItemsLoading, setNewItemsLoading] = useState(false);
-    const [offset, setOffset] = useState(1);
+    const [offset, setOffset] = useState(8);
     const [comicsEnded, setComicsEnded] = useState(false);
 
     const {loading, error, getComics} = useMarvelService();
@@ -25,17 +26,12 @@ const ComicsList = () => {
     const onComicsListLoaded = (newComicsList) => {
         let ended = false;
         if (newComicsList.length < 8) {
-            ended = true
+            ended = true;
         }
-        setComicsList(comicsList => [...comicsList, ...newComicsList]);
+        setComicsList([...comicsList, ...newComicsList]);
         setNewItemsLoading(false);
         setOffset(offset => offset + 8);
         setComicsEnded(ended);
-    }
-    const itemRefs = useRef([]);
-
-    const focusOnItem = (id) => {
-        itemRefs.current[id].focus();
     }
     function renderComicsList(arr) {
         const items = arr.map((item, i) => {
@@ -44,24 +40,13 @@ const ComicsList = () => {
             if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
                 imgStyle = {"objectFit":"fill"}
             }
-            console.log(item.price);
             return (
-                <li className="comics__item"
-                tabIndex={0}
-                ref={el => itemRefs.current[i] = el}
-                key={i}
-                onClick={() => { 
-                    focusOnItem(i)}}
-                onKeyPress={(e) => {
-                    if (e.key === ' ' || e.key === 'Enter') {
-                        focusOnItem(i)
-                    }
-                }}>
-                    <a href="#">
+                <li className="comics__item" key={i}>
+                   <Link to={`/comics/${item.id}`}>
                         <img src={item.thumbnail} alt={item.title} style={imgStyle} className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
                         <div clas sName="comics__item-price">{item.price}</div>
-                    </a>
+                    </Link>
                 </li>
             ) 
         })
@@ -71,10 +56,9 @@ const ComicsList = () => {
             </ul>
         )
     }
-    const items = renderComicsList(comicsList);
-
     const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading && !newItemsLoading ? <Spinner/> : null;
+    const spinner = (loading && !newItemsLoading) ? <Spinner/> : null;
+    const items = renderComicsList(comicsList);
 
     return (
         <div className="comics__list">

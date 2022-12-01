@@ -28,7 +28,7 @@ const CharList = (props) => {
         if (newCharList.length < 9) {
             ended = true
         }
-        setCharList(charList => [...charList, ...newCharList]);
+        setCharList([...charList, ...newCharList]);
         setNewItemsLoading(false);
         setOffset(offset => offset + 9);
         setCharEnded(ended);
