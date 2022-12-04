@@ -1,18 +1,35 @@
 import './charList.scss';
 
 import useMarvelService from '../../services/MarvelService';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import Spinner from '../spinner/Spinner';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types'
+
+import Spinner from '../spinner/Spinner';
+import ErrorMessage from '../errorMessage/ErrorMessage';
+
+const setContent = (process, Component, newItemsLoading) => {
+
+    switch (process) {
+        case 'waiting':
+            return <Spinner/>
+        case 'loading':
+            return newItemsLoading ? <Component/> : <Spinner/>
+        case 'error':
+            return <ErrorMessage/>
+        case 'confirmed':
+            return <Component/>
+        default:
+            throw new Error('Unexpected default state');    
+    }
+}
 
 const CharList = (props) => {
     const [charList, setCharList] = useState([]);
     const [newItemsLoading, setNewItemsLoading] = useState(false);
-    const [offset, setOffset] = useState(1540);
+    const [offset, setOffset] = useState(1520);
     const [charEnded, setCharEnded] = useState(false);
 
-    const {loading, error, getAllCharacters} = useMarvelService();
+    const {process, setProcess, getAllCharacters} = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true);
@@ -22,6 +39,7 @@ const CharList = (props) => {
         initial ? setNewItemsLoading(false) : setNewItemsLoading(true);
         getAllCharacters(offset)
             .then(onCharListLoaded)
+            .then(() => setProcess('confirmed'))
     }
     const onCharListLoaded = (newCharList) => {
         let ended = false;
@@ -74,14 +92,13 @@ const CharList = (props) => {
             </ul>
         )
     }
-    const items = renderItemsOfList(charList);
-
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading && !newItemsLoading ? <Spinner/> : null;
+    const elements = useMemo(() => {
+        return setContent(process, () => renderItemsOfList(charList), newItemsLoading)
+    }, [process])
     return (
         <div className="char__list">
             <ul className="char__grid">
-                {errorMessage} {spinner} {items}
+                {elements}
             </ul>
             <button className="button button__main button__long"
             disabled={newItemsLoading}

@@ -2,7 +2,7 @@ import { useHttp } from '../hooks/http.hook';
 
 const useMarvelService = () => {
 
-    const {loading, error, request, clearError} = useHttp();
+    const {loading, error, request, clearError, process, setProcess} = useHttp();
     const _apiBase = "https://gateway.marvel.com:443/v1/public/";
     const _apiKey = "apikey=79bdfc05b5558c65076634caca17d8e8";
     const _baseOffset = 1540;
@@ -50,7 +50,16 @@ const useMarvelService = () => {
             price: (comics.prices[0].price !== 0) ? comics.prices[0].price + '$' : 'NOT AVAILABLE',
         }
     }
-    return {loading, error, getAllCharacters, getOneCharacter, getComics, getOneComic, getCharByName,clearError};
+    return {loading, 
+        error, 
+        process, 
+        setProcess,
+        getAllCharacters, 
+        getOneCharacter, 
+        getComics, 
+        getOneComic, 
+        getCharByName, 
+        clearError};
 }
 
 
