@@ -35,8 +35,6 @@ npm run start
 
 ### Screenshots:
 
-<img width="1259" alt="Screenshot 2023-03-20 at 13 22 53" src="https://user-images.githubusercontent.com/54810215/226338036-40697b52-3c10-47bb-a54b-dab21b81eb22.png">
-
 <img width="1194" alt="Screenshot 2023-03-20 at 13 23 00" src="https://user-images.githubusercontent.com/54810215/226338078-c90cd8b7-0f21-4299-a025-6ee2248a2337.png">
 
 <img width="1164" alt="Screenshot 2023-03-20 at 13 23 11" src="https://user-images.githubusercontent.com/54810215/226338111-ed8f0bfe-9652-462c-8f71-569f9f5c37c9.png">
